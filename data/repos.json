@@ -1,9 +1,46 @@
 [
   {
-    "name": "Projecte Exemple",
+    "name": "comptabilitat",
     "apps": [
-      { "name": "App 1", "url": "https://exemple.com/app1" },
-      { "name": "App 2", "url": "https://exemple.com/app2" }
+      {
+        "name": "Test repàs Comptabilitat.html",
+        "url": "https://AnnaFarreras.github.io/comptabilitat/Test repàs Comptabilitat.html"
+      },
+      {
+        "name": "Test_balanç_de_situació.html",
+        "url": "https://AnnaFarreras.github.io/comptabilitat/Test_balanç_de_situació.html"
+      },
+      {
+        "name": "Test_comptes_comptables_comptabilitat.html",
+        "url": "https://AnnaFarreras.github.io/comptabilitat/Test_comptes_comptables_comptabilitat.html"
+      }
+    ]
+  },
+  {
+    "name": "Gestio_personal",
+    "apps": [
+      {
+        "name": "Test_de_Gestió_Auxiliar_de_Personal.html",
+        "url": "https://AnnaFarreras.github.io/Gestio_personal/Test_de_Gestió_Auxiliar_de_Personal.html"
+      }
+    ]
+  },
+  {
+    "name": "landingpage",
+    "apps": [
+      {
+        "name": "index.html",
+        "url": "https://AnnaFarreras.github.io/landingpage/index.html"
+      }
+    ]
+  },
+  {
+    "name": "Riscos-Laborals",
+    "apps": [
+      {
+        "name": "Test Riscos Laborals.html",
+        "url": "https://AnnaFarreras.github.io/Riscos-Laborals/Test Riscos Laborals.html"
+      }
     ]
   }
 ]
