@@ -31,9 +31,12 @@
   fetch('data/repos.json')
     .then(response => response.json())
     .then(data => {
+      // Excloure el repositori 'landingpage'
+      const filteredData = data.filter(repo => repo.name.toLowerCase() !== 'landingpage');
+
       const container = document.getElementById('repos-list');
       container.innerHTML = '';
-      data.forEach((repo, i) => {
+      filteredData.forEach((repo, i) => {
         // Botó repositori
         const repoBtn = document.createElement('button');
         repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
