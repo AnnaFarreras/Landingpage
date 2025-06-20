@@ -27,27 +27,34 @@
     </section>
   </main>
 
-  <script>
+<script>
   fetch('data/repos.json')
     .then(response => response.json())
     .then(data => {
       const container = document.getElementById('repos-list');
       container.innerHTML = '';
       data.forEach((repo, i) => {
+        // Botó repositori
         const repoBtn = document.createElement('button');
         repoBtn.textContent = repo.name;
         repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
         repoBtn.setAttribute('aria-expanded', 'false');
         repoBtn.setAttribute('aria-controls', `app-list-${i}`);
 
-        const appList = document.createElement('ul');
+        // Llista d'aplicacions oculta
+        const appList = document.createElement('div');  // div en comptes d'ul per més flexibilitat
         appList.id = `app-list-${i}`;
-        appList.className = 'hidden mt-2 ml-4 space-y-1 text-blue-800';
+        appList.className = 'hidden mt-2 ml-6 space-y-1';
 
         repo.apps.forEach(app => {
-          const li = document.createElement('li');
-          li.innerHTML = `<a href="${app.url}" target="_blank" class="hover:underline">${app.name}</a>`;
-          appList.appendChild(li);
+          const appBtn = document.createElement('button');
+          appBtn.textContent = app.name;
+          appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
+          appBtn.title = app.url;
+          appBtn.addEventListener('click', () => {
+            window.open(app.url, '_blank');
+          });
+          appList.appendChild(appBtn);
         });
 
         repoBtn.addEventListener('click', () => {
