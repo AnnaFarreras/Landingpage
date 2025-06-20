@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Clona el repositori
         uses: actions/checkout@v3
+        with:
+         token: ${{ secrets.GH_TOKEN }}
 
       - name: Instal·la Node.js
         uses: actions/setup-node@v3
