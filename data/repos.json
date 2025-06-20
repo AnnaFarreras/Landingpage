@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Projecte Exemple",
+    "apps": [
+      { "name": "App 1", "url": "https://exemple.com/app1" },
+      { "name": "App 2", "url": "https://exemple.com/app2" }
+    ]
+  }
+]
