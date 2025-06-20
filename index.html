@@ -5,9 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gestió Administrativa Comptable</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Opcional: escala del 90% al contingut de l'iframe
+    #viewer {
+      transform-origin: top left;
+      transform: scale(0.9);
+      width: 111.11%;
+      height: 111.11vh;
+    }
+    */
+  </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
-  <header class="bg-blue-600 text-white p-4 text-center text-xl font-bold flex justify-between items-center">
+  <header class="bg-blue-600 text-white text-center text-xl font-bold flex justify-between items-center py-2 px-4">
     <div>Gestió Administrativa Comptable</div>
     <button id="toggleSidebar" class="lg:hidden px-3 py-1 bg-blue-500 rounded focus:outline-none">Menú</button>
   </header>
@@ -17,7 +27,6 @@
     <aside id="sidebar" 
       class="bg-white shadow-md p-4 w-64 max-w-[25vw] h-screen overflow-y-auto
              hidden lg:block lg:static">
-      <!-- Capçalera opcional, si vols treure-la, comenta o elimina aquesta línia -->
       <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>
       <div id="repos-list" class="space-y-2">
         <!-- Contingut carregat per JS -->
@@ -25,7 +34,7 @@
     </aside>
 
     <!-- Contingut principal amb iframe -->
-    <section class="flex-1 p-4 flex flex-col min-h-0">
+    <section class="flex-1 p-2 flex flex-col min-h-0">
       <iframe id="viewer" src="" class="w-full h-full border rounded-lg flex-grow"></iframe>
     </section>
   </main>
@@ -65,7 +74,6 @@
           appBtn.title = app.url;
           appBtn.addEventListener('click', () => {
             document.getElementById('viewer').src = app.url;
-            // A mòbil, opcional: tancar sidebar quan cliquem una app
             if(window.innerWidth < 1024) {
               sidebar.classList.add('hidden');
             }
