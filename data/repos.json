@@ -1,18 +1,18 @@
 [
   {
-    "name": "comptabilitat",
+    "name": "Comptabilitat",
     "apps": [
       {
         "name": "Test repàs Comptabilitat.html",
-        "url": "https://AnnaFarreras.github.io/comptabilitat/Test repàs Comptabilitat.html"
+        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test repàs Comptabilitat.html"
       },
       {
         "name": "Test_balanç_de_situació.html",
-        "url": "https://AnnaFarreras.github.io/comptabilitat/Test_balanç_de_situació.html"
+        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_balanç_de_situació.html"
       },
       {
         "name": "Test_comptes_comptables_comptabilitat.html",
-        "url": "https://AnnaFarreras.github.io/comptabilitat/Test_comptes_comptables_comptabilitat.html"
+        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_comptes_comptables_comptabilitat.html"
       }
     ]
   },
@@ -26,20 +26,20 @@
     ]
   },
   {
-    "name": "landingpage",
+    "name": "Landingpage",
     "apps": [
       {
         "name": "index.html",
-        "url": "https://AnnaFarreras.github.io/landingpage/index.html"
+        "url": "https://AnnaFarreras.github.io/Landingpage/index.html"
       }
     ]
   },
   {
-    "name": "Riscos-Laborals",
+    "name": "Riscos_Laborals",
     "apps": [
       {
         "name": "Test Riscos Laborals.html",
-        "url": "https://AnnaFarreras.github.io/Riscos-Laborals/Test Riscos Laborals.html"
+        "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test Riscos Laborals.html"
       }
     ]
   }
