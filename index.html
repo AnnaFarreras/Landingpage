@@ -39,7 +39,9 @@
       filteredData.forEach((repo, i) => {
         // Botó repositori
         const repoBtn = document.createElement('button');
-        repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
+        appBtn.textContent = app.name
+          .replace(/[-_]/g, ' ')
+          .replace(/\.html?$/i, '');
         repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
         repoBtn.setAttribute('aria-expanded', 'false');
         repoBtn.setAttribute('aria-controls', `app-list-${i}`);
