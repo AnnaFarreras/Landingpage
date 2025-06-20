@@ -2,7 +2,7 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gestió Administrativa Comptable</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -12,18 +12,18 @@
   </header>
   <main class="flex flex-col lg:flex-row flex-1">
     <!-- Sidebar generat automàticament -->
-<aside id="repos" class="bg-white shadow-md p-4 w-full lg:w-64 h-screen overflow-y-auto">
-  <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>
-  <div id="repos-list" class="space-y-2">
-    <!-- Aquí carregarem el llistat dinàmicament -->
-  </div>
-</aside>
-
-    <section class="flex-1 p-4">
-      <div id="apps" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Botons d'aplicacions -->
+    <aside id="repos" class="bg-white shadow-md p-4 w-full lg:w-64 h-screen overflow-y-auto">
+      <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>
+      <div id="repos-list" class="space-y-2">
+        <!-- Aquí carregarem el llistat dinàmicament -->
       </div>
-      <iframe id="viewer" src="" class="w-full mt-4 h-[70vh] border rounded-lg"></iframe>
+    </aside>
+
+    <section class="flex-1 p-4 flex flex-col">
+      <div id="apps" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Botons d'aplicacions (ara no s’utilitza, podem treure-ho si vols) -->
+      </div>
+      <iframe id="viewer" src="" class="w-full mt-4 h-[70vh] border rounded-lg flex-grow"></iframe>
     </section>
   </main>
 
@@ -42,7 +42,7 @@
         repoBtn.setAttribute('aria-controls', `app-list-${i}`);
 
         // Llista d'aplicacions oculta
-        const appList = document.createElement('div');  // div en comptes d'ul per més flexibilitat
+        const appList = document.createElement('div');
         appList.id = `app-list-${i}`;
         appList.className = 'hidden mt-2 ml-6 space-y-1';
 
@@ -52,7 +52,8 @@
           appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
           appBtn.title = app.url;
           appBtn.addEventListener('click', () => {
-          document.getElementById('viewer').src = app.url;
+            // Carrega l'aplicació dins l'iframe
+            document.getElementById('viewer').src = app.url;
           });
           appList.appendChild(appBtn);
         });
