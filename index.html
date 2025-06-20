@@ -50,5 +50,41 @@
         });
       });
   </script>
+  <div id="sidebar" class="sidebar"></div>
+
+<script>
+  fetch('data/repos.json')
+    .then(response => response.json())
+    .then(data => {
+      let html = '<h2>Els meus projectes</h2><ul>';
+      data.forEach(repo => {
+        html += `<li><strong>${repo.name}</strong><ul>`;
+        repo.apps.forEach(app => {
+          html += `<li><a href="${app.url}" target="_blank">${app.name}</a></li>`;
+        });
+        html += '</ul></li>';
+      });
+      html += '</ul>';
+      document.getElementById('sidebar').innerHTML = html;
+    });
+</script>
+
+<style>
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background: #f4f4f4;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #ccc;
+}
+body {
+  margin-left: 260px;
+}
+</style>
+  
 </body>
 </html>
