@@ -1,0 +1,35 @@
+name: Generar repos.json
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1' # Cada dilluns a mitjanit
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clona el repositori
+        uses: actions/checkout@v3
+
+      - name: Instal·la Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Instal·la dependències
+        run: npm install axios
+
+      - name: Executa script de generació
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: node scripts/generate-json.js
+
+      - name: Fes commit dels resultats
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/repos.json
+          git commit -m "Actualitza repos.json" || echo "Sense canvis"
+          git push
