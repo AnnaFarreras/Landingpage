@@ -12,9 +12,12 @@
   </header>
   <main class="flex flex-col lg:flex-row flex-1">
     <!-- Sidebar generat automàticament -->
-    <aside id="repos" class="bg-white shadow-md p-4 w-full lg:w-64 h-screen overflow-y-auto">
-      <!-- Aquí es carregarà el contingut dels repositoris -->
-    </aside>
+<aside id="repos" class="bg-white shadow-md p-4 w-full lg:w-64 h-screen overflow-y-auto">
+  <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>
+  <div id="repos-list" class="space-y-2">
+    <!-- Aquí carregarem el llistat dinàmicament -->
+  </div>
+</aside>
 
     <section class="flex-1 p-4">
       <div id="apps" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -25,25 +28,42 @@
   </main>
 
   <script>
-    fetch('data/repos.json')
-      .then(response => response.json())
-      .then(data => {
-        let html = '<h2 class="text-lg font-semibold mb-4">Els meus projectes</h2><ul class="space-y-2">';
-        data.forEach(repo => {
-          html += `<li><strong class="block mb-1">${repo.name}</strong><ul class="ml-4 list-disc space-y-1">`;
-          repo.apps.forEach(app => {
-            html += `<li><a href="${app.url}" target="_blank" class="text-blue-600 hover:underline">${app.name}</a></li>`;
-          });
-          html += '</ul></li>';
+  fetch('data/repos.json')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('repos-list');
+      container.innerHTML = '';
+      data.forEach((repo, i) => {
+        const repoBtn = document.createElement('button');
+        repoBtn.textContent = repo.name;
+        repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
+        repoBtn.setAttribute('aria-expanded', 'false');
+        repoBtn.setAttribute('aria-controls', `app-list-${i}`);
+
+        const appList = document.createElement('ul');
+        appList.id = `app-list-${i}`;
+        appList.className = 'hidden mt-2 ml-4 space-y-1 text-blue-800';
+
+        repo.apps.forEach(app => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="${app.url}" target="_blank" class="hover:underline">${app.name}</a>`;
+          appList.appendChild(li);
         });
-        html += '</ul>';
-        document.getElementById('repos').innerHTML = html;
-      })
-      .catch(err => {
-        document.getElementById('repos').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
-        console.error(err);
+
+        repoBtn.addEventListener('click', () => {
+          const isHidden = appList.classList.contains('hidden');
+          appList.classList.toggle('hidden');
+          repoBtn.setAttribute('aria-expanded', !isHidden);
+        });
+
+        container.appendChild(repoBtn);
+        container.appendChild(appList);
       });
-  </script>
+    })
+    .catch(() => {
+      document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
+    });
+</script>
 
 </body>
 </html>
