@@ -6,39 +6,14 @@
   <title>Gestió Administrativa Comptable</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Estils per a l'iframe */
+    /* Opcional: escala del 90% al contingut de l'iframe
     #viewer {
-      border: none; /* Treu el marc */
-      /* Centra l'iframe dins el seu contenidor i aplica l'escalat */
-      position: absolute; /* Permet posicionament absolut dins el contenidor relatiu */
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.80); /* Centra i redueix al 80% */
-      /* Quan usem transform per escalar i posicionar,
-          normalment no cal ajustar el width/height per compensar.
-          L'iframe ocuparà la seva mida original i després es mourà i escalarà.
-          Si el contingut de l'iframe ha d'omplir el contenidor sense escalat forçat,
-          aleshores caldrà ajustar el CSS del contingut de l'iframe com inicialment.
-          Però si vols el 80% de zoom, aquest és el camí.
-      */
-      width: 100%; /* Assegura que l'iframe base sigui 100% del seu contenidor */
-         height: 100%;
-         max-width: 100%; /* Per si de cas */
-         max-height: 100%; /* Per si de cas */
+      transform-origin: top left;
+      transform: scale(0.9);
+      width: 111.11%;
+      height: 111.11vh;
     }
-
-    /* Ajusta el contenidor de l'iframe per al centratge */
-    .iframe-container { /* Nova classe per al contenidor */
-      position: relative; /* Necessari per al posicionament absolut de #viewer */
-      flex-grow: 1; /* Permet que ocupi l'espai disponible */
-      /* Puc veure que la teva <section> ja és flex.
-          Si volem que ocupi l'espai i centrar contingut,
-          podem fer-ho directament a la <section> */
-      display: flex; /* Ja ho tens a la section */
-      justify-content: center; /* Centra horitzontalment */
-      align-items: center;     /* Centra verticalment */
-      overflow: hidden; /* Evita barres de desplaçament innecessàries */
-    }
+    */
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -48,21 +23,77 @@
   </header>
 
   <main class="flex flex-1 overflow-hidden flex-col lg:flex-row">
-        <aside id="sidebar" 
+    <!-- Sidebar -->
+    <aside id="sidebar" 
       class="bg-white shadow-md p-4 w-64 max-w-[25vw] h-screen overflow-y-auto
              hidden lg:block lg:static">
-           <div id="repos-list" class="space-y-2">
-              </div>
+     <!--  <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>-->
+      <div id="repos-list" class="space-y-2">
+        <!-- Contingut carregat per JS -->
+      </div>
     </aside>
 
-            <section class="flex-1 p-2 min-h-0 iframe-container">
-      <iframe id="viewer" src="" class="w-full h-full"></iframe>
+    <!-- Contingut principal amb iframe -->
+    <section class="flex-1 p-2 flex flex-col min-h-0">
+      <iframe id="viewer" src="" class="w-full h-full border rounded-lg flex-grow"></iframe>
     </section>
   </main>
 
 <script>
-// ... el teu codi Javascript existent ...
-</script>
+  // Toggle sidebar a mòbil
+  const toggleBtn = document.getElementById('toggleSidebar');
+  const sidebar = document.getElementById('sidebar');
 
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden');
+  });
+
+  // Carrega repositoris i aplicacions
+  fetch('data/repos.json')
+    .then(res => res.json())
+    .then(data => {
+      const filteredData = data.filter(repo => repo.name.toLowerCase() !== 'landingpage');
+      const container = document.getElementById('repos-list');
+      container.innerHTML = '';
+
+      filteredData.forEach((repo, i) => {
+        const repoBtn = document.createElement('button');
+        repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
+        repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
+        repoBtn.setAttribute('aria-expanded', 'false');
+        repoBtn.setAttribute('aria-controls', `app-list-${i}`);
+
+        const appList = document.createElement('div');
+        appList.id = `app-list-${i}`;
+        appList.className = 'hidden mt-2 ml-6 space-y-1';
+
+        repo.apps.forEach(app => {
+          const appBtn = document.createElement('button');
+          appBtn.textContent = app.name.replace(/[-_]/g, ' ').replace(/\.html?$/i, '');
+          appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
+          appBtn.title = app.url;
+          appBtn.addEventListener('click', () => {
+            document.getElementById('viewer').src = app.url;
+            if(window.innerWidth < 1024) {
+              sidebar.classList.add('hidden');
+            }
+          });
+          appList.appendChild(appBtn);
+        });
+
+        repoBtn.addEventListener('click', () => {
+          const isHidden = appList.classList.contains('hidden');
+          appList.classList.toggle('hidden');
+          repoBtn.setAttribute('aria-expanded', !isHidden);
+        });
+
+        container.appendChild(repoBtn);
+        container.appendChild(appList);
+      });
+    })
+    .catch(() => {
+      document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
+    });
+</script>
 </body>
 </html>
