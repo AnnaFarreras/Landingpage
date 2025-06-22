@@ -1,99 +1,94 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gestió Administrativa Comptable</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Opcional: escala del 90% al contingut de l'iframe
-    #viewer {
-      transform-origin: top left;
-      transform: scale(0.9);
-      width: 111.11%;
-      height: 111.11vh;
-    }
-    */
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestió Administrativa Comptable</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    iframe {
+      border: none;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
-  <header class="bg-blue-600 text-white text-center text-xl font-bold flex justify-between items-center py-2 px-4">
-    <div>Gestió Administrativa Comptable</div>
-    <button id="toggleSidebar" class="lg:hidden px-3 py-1 bg-blue-500 rounded focus:outline-none">Menú</button>
-  </header>
+<body class="bg-gray-100 h-full">
+  <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white w-64 h-full shadow-md fixed top-0 left-0 z-10 p-4 overflow-y-auto hidden lg:block">
+      <div id="repos-list" class="space-y-2"></div>
+    </aside>
 
-  <main class="flex flex-1 overflow-hidden flex-col lg:flex-row">
-    <!-- Sidebar -->
-    <aside id="sidebar" 
-      class="bg-white shadow-md p-4 w-64 max-w-[25vw] h-screen overflow-y-auto
-             hidden lg:block lg:static">
-     <!--  <h2 class="text-lg font-semibold mb-4">Els meus projectes</h2>-->
-      <div id="repos-list" class="space-y-2">
-        <!-- Contingut carregat per JS -->
-      </div>
-    </aside>
+    <!-- Contingut principal -->
+    <div class="flex-1 h-full ml-0 lg:ml-64 flex flex-col">
+      <header class="bg-blue-600 text-white text-center text-xl font-bold flex justify-between items-center py-2 px-4">
+        <div>Gestió Administrativa Comptable</div>
+        <button id="toggleSidebar" class="lg:hidden px-3 py-1 bg-blue-500 rounded focus:outline-none">Menú</button>
+      </header>
+      <main class="flex-1 flex">
+        <iframe id="viewer" src="" class="w-full h-full"></iframe>
+      </main>
+    </div>
+  </div>
 
-    <!-- Contingut principal amb iframe -->
-    <section class="flex-1 p-2 flex flex-col min-h-0">
-      <iframe id="viewer" src="" class="w-full h-full border rounded-lg flex-grow"></iframe>
-    </section>
-  </main>
+  <script>
+    // Toggle sidebar a mòbil
+    const toggleBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
 
-<script>
-  // Toggle sidebar a mòbil
-  const toggleBtn = document.getElementById('toggleSidebar');
-  const sidebar = document.getElementById('sidebar');
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('hidden');
+    });
 
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('hidden');
-  });
+    // Carrega repositoris i aplicacions
+    fetch('data/repos.json')
+      .then(res => res.json())
+      .then(data => {
+        const filteredData = data.filter(repo => repo.name.toLowerCase() !== 'landingpage');
+        const container = document.getElementById('repos-list');
+        container.innerHTML = '';
 
-  // Carrega repositoris i aplicacions
-  fetch('data/repos.json')
-    .then(res => res.json())
-    .then(data => {
-      const filteredData = data.filter(repo => repo.name.toLowerCase() !== 'landingpage');
-      const container = document.getElementById('repos-list');
-      container.innerHTML = '';
+        filteredData.forEach((repo, i) => {
+          const repoBtn = document.createElement('button');
+          repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
+          repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
+          repoBtn.setAttribute('aria-expanded', 'false');
+          repoBtn.setAttribute('aria-controls', `app-list-${i}`);
 
-      filteredData.forEach((repo, i) => {
-        const repoBtn = document.createElement('button');
-        repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
-        repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
-        repoBtn.setAttribute('aria-expanded', 'false');
-        repoBtn.setAttribute('aria-controls', `app-list-${i}`);
+          const appList = document.createElement('div');
+          appList.id = `app-list-${i}`;
+          appList.className = 'hidden mt-2 ml-6 space-y-1';
 
-        const appList = document.createElement('div');
-        appList.id = `app-list-${i}`;
-        appList.className = 'hidden mt-2 ml-6 space-y-1';
+          repo.apps.forEach(app => {
+            const appBtn = document.createElement('button');
+            appBtn.textContent = app.name.replace(/[-_]/g, ' ').replace(/\.html?$/i, '');
+            appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
+            appBtn.title = app.url;
+            appBtn.addEventListener('click', () => {
+              document.getElementById('viewer').src = app.url;
+              if(window.innerWidth < 1024) {
+                sidebar.classList.add('hidden');
+              }
+            });
+            appList.appendChild(appBtn);
+          });
 
-        repo.apps.forEach(app => {
-          const appBtn = document.createElement('button');
-          appBtn.textContent = app.name.replace(/[-_]/g, ' ').replace(/\.html?$/i, '');
-          appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
-          appBtn.title = app.url;
-          appBtn.addEventListener('click', () => {
-            document.getElementById('viewer').src = app.url;
-            if(window.innerWidth < 1024) {
-              sidebar.classList.add('hidden');
-            }
-          });
-          appList.appendChild(appBtn);
-        });
+          repoBtn.addEventListener('click', () => {
+            const isHidden = appList.classList.contains('hidden');
+            appList.classList.toggle('hidden');
+            repoBtn.setAttribute('aria-expanded', !isHidden);
+          });
 
-        repoBtn.addEventListener('click', () => {
-          const isHidden = appList.classList.contains('hidden');
-          appList.classList.toggle('hidden');
-          repoBtn.setAttribute('aria-expanded', !isHidden);
-        });
-
-        container.appendChild(repoBtn);
-        container.appendChild(appList);
-      });
-    })
-    .catch(() => {
-      document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
-    });
-</script>
+          container.appendChild(repoBtn);
+          container.appendChild(appList);
+        });
+      })
+      .catch(() => {
+        document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
+      });
+  </script>
 </body>
 </html>
