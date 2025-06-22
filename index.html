@@ -90,5 +90,18 @@
         document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
       });
   </script>
+  <script>
+  window.addEventListener('message', (event) => {
+    if (event.data?.type === 'resize-iframe') {
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        // Comprovem si l'src coincideix amb el que envia el missatge
+        if (iframe.contentWindow === event.source) {
+          iframe.style.height = event.data.height + 'px';
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
