@@ -51,5 +51,14 @@
         "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test Riscos Laborals.html"
       }
     ]
+  },
+  {
+    "name": "test_proves",
+    "apps": [
+      {
+        "name": "test_prova.html",
+        "url": "https://AnnaFarreras.github.io/test_proves/test_prova.html"
+      }
+    ]
   }
 ]
