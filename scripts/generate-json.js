@@ -1,46 +1,46 @@
-
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
 
-const username = 'AnnaFarreras';
-const token = process.env.GH_TOKEN;
+function findFiles(dir, extensions, files = []) {
+  const items = fs.readdirSync(dir);
 
-async function getRepos() {
-  const response = await axios.get(`https://api.github.com/users/${username}/repos`, {
-    headers: { Authorization: `token ${token}` }
-  });
-  return response.data;
-}
-
-async function getHTMLsFromRepo(repo) {
-  const res = await axios.get(`https://api.github.com/repos/${username}/${repo}/contents`, {
-    headers: { Authorization: `token ${token}` }
-  });
-
-  return res.data.filter(f => f.name.endsWith('.html')).map(f => ({
-    name: f.name,
-    url: `https://${username}.github.io/${repo}/${f.name}`
-  }));
-}
-
-async function main() {
-  const repos = await getRepos();
-  const output = [];
-
-  for (const repo of repos) {
-    try {
-      const htmls = await getHTMLsFromRepo(repo.name);
-      if (htmls.length > 0) {
-        output.push({ name: repo.name, apps: htmls });
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      findFiles(fullPath, extensions, files);
+    } else {
+      const ext = path.extname(item).toLowerCase();
+      if (extensions.includes(ext)) {
+        files.push(fullPath);
       }
-    } catch (e) {
-      console.error("Error with repo:", repo.name, e.message);
     }
   }
+  return files;
+}
 
-  fs.mkdirSync("data", { recursive: true });
-  fs.writeFileSync("data/repos.json", JSON.stringify(output, null, 2));
+function main() {
+  const exts = ['.html', '.pdf'];
+
+  const allFiles = findFiles('./', exts);
+
+  const output = allFiles.map(f => {
+    const ext = path.extname(f);
+    const name = path.basename(f, ext)
+      .replace(/-/g, ' ')
+      .replace(/test /i, '');
+
+    return {
+      name,
+      ruta: f.replace(/^\.\//, '')
+    };
+  });
+
+  fs.mkdirSync('data', { recursive: true });
+  fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
+
+  console.log(`Generats ${output.length} fitxers (html i pdf) a data/repos.json`);
 }
 
 main();
+
