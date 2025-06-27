@@ -28,26 +28,32 @@
         <div>Benvingut a <span class="text-white font-bold">TestàTIC</span>, el teu entrenador digital per aprendre jugant.</div>
         <button id="toggleSidebar" class="lg:hidden px-3 py-1 bg-blue-500 rounded focus:outline-none">Menú</button>
       </header>
-      <section class="bg-blue-100 text-gray-800 text-center px-6 py-8">
-  <h1 class="text-2xl font-semibold mb-4">Fes un tast de tests interactius i posa a prova els teus coneixements mentre et prepares per dominar les TIC.<br> Millora cada dia amb petites dosis de pràctica... i diverteix-te aprenent!</h1>
 
-</section>
+      <section class="bg-blue-100 text-gray-800 text-center px-6 py-8">
+        <h1 class="text-2xl font-semibold mb-4">
+          Fes un tast de tests interactius i posa a prova els teus coneixements mentre et prepares per dominar les TIC.<br>
+          Millora cada dia amb petites dosis de pràctica... i diverteix-te aprenent!
+        </h1>
+      </section>
+
       <main class="flex-1 flex">
         <iframe id="viewer" src="" class="w-full h-full"></iframe>
       </main>
     </div>
   </div>
 
+  <!-- Toggle sidebar per a mòbil -->
   <script>
-    // Toggle sidebar a mòbil
     const toggleBtn = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
 
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('hidden');
     });
+  </script>
 
-    // Carrega repositoris i aplicacions
+  <!-- Carrega la barra lateral jeràrquica -->
+  <script>
     fetch('data/repos.json')
       .then(res => res.json())
       .then(data => {
@@ -55,57 +61,77 @@
         const container = document.getElementById('repos-list');
         container.innerHTML = '';
 
-        filteredData.forEach((repo, i) => {
+        filteredData.forEach((repo, repoIndex) => {
           const repoBtn = document.createElement('button');
-          repoBtn.textContent = repo.name.replace(/[-_]/g, ' ');
+          repoBtn.textContent = `▸ ${repo.name}`;
           repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
           repoBtn.setAttribute('aria-expanded', 'false');
-          repoBtn.setAttribute('aria-controls', `app-list-${i}`);
 
-          const appList = document.createElement('div');
-          appList.id = `app-list-${i}`;
-          appList.className = 'hidden mt-2 ml-6 space-y-1';
-
-          repo.apps.forEach(app => {
-            const appBtn = document.createElement('button');
-            appBtn.textContent = app.name.replace(/[-_]/g, ' ').replace(/\.html?$/i, '');
-            appBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
-            appBtn.title = app.url;
-            appBtn.addEventListener('click', () => {
-              document.getElementById('viewer').src = app.url;
-              if(window.innerWidth < 1024) {
-                sidebar.classList.add('hidden');
-              }
-            });
-            appList.appendChild(appBtn);
-          });
+          const folderContainer = document.createElement('div');
+          folderContainer.className = 'hidden mt-2 ml-4 space-y-1';
 
           repoBtn.addEventListener('click', () => {
-            const isHidden = appList.classList.contains('hidden');
-            appList.classList.toggle('hidden');
-            repoBtn.setAttribute('aria-expanded', !isHidden);
+            const isHidden = folderContainer.classList.contains('hidden');
+            folderContainer.classList.toggle('hidden');
+            repoBtn.textContent = `${isHidden ? '▾' : '▸'} ${repo.name}`;
+            repoBtn.setAttribute('aria-expanded', isHidden);
+          });
+
+          repo.folders.forEach((folder, folderIndex) => {
+            const folderBtn = document.createElement('button');
+            folderBtn.textContent = `▸ ${folder.name}`;
+            folderBtn.className = 'w-full text-left px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none';
+            folderBtn.setAttribute('aria-expanded', 'false');
+
+            const fileList = document.createElement('div');
+            fileList.className = 'hidden mt-1 ml-4 space-y-1';
+
+            folderBtn.addEventListener('click', () => {
+              const isHidden = fileList.classList.contains('hidden');
+              fileList.classList.toggle('hidden');
+              folderBtn.textContent = `${isHidden ? '▾' : '▸'} ${folder.name}`;
+              folderBtn.setAttribute('aria-expanded', isHidden);
+            });
+
+            folder.files.forEach(file => {
+              const fileBtn = document.createElement('button');
+              fileBtn.textContent = file.name;
+              fileBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
+              fileBtn.title = file.url;
+              fileBtn.addEventListener('click', () => {
+                document.getElementById('viewer').src = file.url;
+                if (window.innerWidth < 1024) {
+                  sidebar.classList.add('hidden');
+                }
+              });
+              fileList.appendChild(fileBtn);
+            });
+
+            folderContainer.appendChild(folderBtn);
+            folderContainer.appendChild(fileList);
           });
 
           container.appendChild(repoBtn);
-          container.appendChild(appList);
+          container.appendChild(folderContainer);
         });
       })
       .catch(() => {
         document.getElementById('repos-list').innerHTML = '<p class="text-red-500">No s\'ha pogut carregar el llistat de repositoris.</p>';
       });
   </script>
+
+  <!-- Ajust dinàmic d'iframe (si fa falta) -->
   <script>
-  window.addEventListener('message', (event) => {
-    if (event.data?.type === 'resize-iframe') {
-      const iframes = document.querySelectorAll('iframe');
-      iframes.forEach(iframe => {
-        // Comprovem si l'src coincideix amb el que envia el missatge
-        if (iframe.contentWindow === event.source) {
-          iframe.style.height = event.data.height + 'px';
-        }
-      });
-    }
-  });
-</script>
+    window.addEventListener('message', (event) => {
+      if (event.data?.type === 'resize-iframe') {
+        const iframes = document.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+          if (iframe.contentWindow === event.source) {
+            iframe.style.height = event.data.height + 'px';
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
