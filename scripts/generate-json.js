@@ -1,75 +1,57 @@
-aqui tinc això:
 const fs = require('fs');
-
 const path = require('path');
 
-const axios = require('axios');
+// Funció per buscar fitxers recursivament
+function findFiles(dir, extensions, files = []) {
+  const items = fs.readdirSync(dir);
 
-const username = 'AnnaFarreras';
-
-const token = process.env.GH_TOKEN;
-
-async function getRepos() {
-
-const response = await axios.get(https://api.github.com/users/${username}/repos, {
-
-headers: { Authorization: `token ${token}` }
-
-});
-
-return response.data;
-
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+    if (stat.isDirectory()) {
+      findFiles(fullPath, extensions, files);
+    } else {
+      const ext = path.extname(item).toLowerCase();
+      if (extensions.includes(ext)) {
+        files.push(fullPath);
+      }
+    }
+  }
+  return files;
 }
 
-async function getHTMLsFromRepo(repo) {
+function main() {
+  const exts = ['.html', '.pdf'];
+  const files = findFiles('./', exts);
 
-const res = await axios.get(https://api.github.com/repos/${username}/${repo}/contents, {
+  // Grup per repositori (carpeta principal)
+  const repos = {};
 
-headers: { Authorization: `token ${token}` }
+  for (const file of files) {
+    const relativePath = file.replace(/^\.\//, ''); // sense ./ inicial
+    const parts = relativePath.split(path.sep);
 
-});
+    const repoName = parts[0] === 'index.html' || parts.length === 1 ? 'Landingpage' : parts[0];
+    const fileName = path.basename(file);
+    const appName = fileName.replace(/-/g, ' ').replace(/test /i, '');
 
-return res.data.filter(f => f.name.endsWith('.html')).map(f => ({
+    const url = `https://annafarreras.github.io/${repoName}/${parts.slice(1).join('/')}`;
 
-name: f.name,
+    if (!repos[repoName]) repos[repoName] = [];
 
-url: `https://${username}.github.io/${repo}/${f.name}`
-
-}));
-
-}
-
-async function main() {
-
-const repos = await getRepos();
-
-const output = [];
-
-for (const repo of repos) {
-
-try {
-
-  const htmls = await getHTMLsFromRepo(repo.name);
-
-  if (htmls.length > 0) {
-
-    output.push({ name: repo.name, apps: htmls });
-
+    repos[repoName].push({ name: appName, url });
   }
 
-} catch (e) {
+  // Formata en el format esperat
+  const output = Object.keys(repos).map(repo => ({
+    name: repo,
+    apps: repos[repo]
+  }));
 
-  console.error("Error with repo:", repo.name, e.message);
+  fs.mkdirSync('data', { recursive: true });
+  fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
 
-}
-
-}
-
-fs.mkdirSync("data", { recursive: true });
-
-fs.writeFileSync("data/repos.json", JSON.stringify(output, null, 2));
-
+  console.log(`✔️ Generats ${files.length} fitxers (html i pdf) a data/repos.json`);
 }
 
 main();
-
