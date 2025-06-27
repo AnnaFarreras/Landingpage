@@ -1,57 +1,64 @@
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 
-// Funció per buscar fitxers recursivament
-function findFiles(dir, extensions, files = []) {
-  const items = fs.readdirSync(dir);
+const username = 'AnnaFarreras';
+const token = process.env.GH_TOKEN;
 
-  for (const item of items) {
-    const fullPath = path.join(dir, item);
-    const stat = fs.statSync(fullPath);
-    if (stat.isDirectory()) {
-      findFiles(fullPath, extensions, files);
-    } else {
-      const ext = path.extname(item).toLowerCase();
-      if (extensions.includes(ext)) {
-        files.push(fullPath);
-      }
-    }
-  }
-  return files;
+async function getRepos() {
+  const response = await axios.get(`https://api.github.com/users/${username}/repos`, {
+    headers: { Authorization: `token ${token}` }
+  });
+  return response.data;
 }
 
-function main() {
-  const exts = ['.html', '.pdf'];
-  const files = findFiles('./', exts);
+async function getFilesRecursively(repo, dir = '') {
+  const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${dir}`;
+  try {
+    const res = await axios.get(apiUrl, {
+      headers: { Authorization: `token ${token}` }
+    });
 
-  // Grup per repositori (carpeta principal)
-  const repos = {};
+    const results = [];
 
-  for (const file of files) {
-    const relativePath = file.replace(/^\.\//, ''); // sense ./ inicial
-    const parts = relativePath.split(path.sep);
+    for (const item of res.data) {
+      if (item.type === 'dir') {
+        // 🔁 Recurse into subfolders
+        const subfiles = await getFilesRecursively(repo, item.path);
+        results.push(...subfiles);
+      } else if (item.name.endsWith('.html') || item.name.endsWith('.pdf')) {
+        results.push({
+          name: item.name.replace(/-/g, ' ').replace(/test /i, '').replace(/\.(html|pdf)$/i, ''),
+          url: `https://${username}.github.io/${repo}/${item.path}`
+        });
+      }
+    }
 
-    const repoName = parts[0] === 'index.html' || parts.length === 1 ? 'Landingpage' : parts[0];
-    const fileName = path.basename(file);
-    const appName = fileName.replace(/-/g, ' ').replace(/test /i, '');
-
-    const url = `https://annafarreras.github.io/${repoName}/${parts.slice(1).join('/')}`;
-
-    if (!repos[repoName]) repos[repoName] = [];
-
-    repos[repoName].push({ name: appName, url });
+    return results;
+  } catch (e) {
+    console.error(`❌ Error accedint a ${repo}/${dir}: ${e.message}`);
+    return [];
   }
+}
 
-  // Formata en el format esperat
-  const output = Object.keys(repos).map(repo => ({
-    name: repo,
-    apps: repos[repo]
-  }));
+async function main() {
+  const repos = await getRepos();
+  const output = [];
+
+  for (const repo of repos) {
+    const apps = await getFilesRecursively(repo.name);
+    if (apps.length > 0) {
+      output.push({
+        name: repo.name,
+        apps
+      });
+    }
+  }
 
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
 
-  console.log(`✔️ Generats ${files.length} fitxers (html i pdf) a data/repos.json`);
+  console.log(`✅ Fitxer repos.json creat amb ${output.length} repositoris.`);
 }
 
 main();
