@@ -1,71 +1,96 @@
 [
   {
-    "name": "Actic / ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
-    "apps": [
-      {
-        "name": "Temari ACTIC 3 – C5 · Mòdul 1: Manipulació d’imatges fixes",
-        "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari%20ACTIC%203%20%E2%80%93%20C5%20%C2%B7%20M%C3%B2dul%201:%20Manipulaci%C3%B3%20d%E2%80%99imatges%20fixes.html"
-      },
-      {
-        "name": "Test_ACTIC_3_C5_Gimp.html",
-        "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Gimp.html.html"
-      },
-      {
-        "name": "Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
-        "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat.html"
-      }
-    ]
-  },
-  {
     "name": "Actic",
-    "apps": [
+    "folders": [
       {
-        "name": "Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
-        "url": "https://AnnaFarreras.github.io/Actic/Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat.html"
+        "name": "ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
+        "files": [
+          {
+            "name": "Temari ACTIC 3 – C5 · Mòdul 1: Manipulació d’imatges fixes",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari%20ACTIC%203%20%E2%80%93%20C5%20%C2%B7%20M%C3%B2dul%201:%20Manipulaci%C3%B3%20d%E2%80%99imatges%20fixes.html"
+          },
+          {
+            "name": "Test_ACTIC_3_C5_Gimp.html",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Gimp.html.html"
+          },
+          {
+            "name": "Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat.html"
+          }
+        ]
+      },
+      {
+        "name": "Arrel",
+        "files": [
+          {
+            "name": "Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
+            "url": "https://AnnaFarreras.github.io/Actic/Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat.html"
+          }
+        ]
       }
     ]
   },
   {
     "name": "Comptabilitat",
-    "apps": [
+    "folders": [
       {
-        "name": "repàs Comptabilitat",
-        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test%20rep%C3%A0s%20Comptabilitat.html"
-      },
-      {
-        "name": "Test_balanç_de_situació",
-        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_balan%C3%A7_de_situaci%C3%B3.html"
-      },
-      {
-        "name": "Test_comptes_comptables_comptabilitat",
-        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_comptes_comptables_comptabilitat.html"
+        "name": "Arrel",
+        "files": [
+          {
+            "name": "Test repàs Comptabilitat",
+            "url": "https://AnnaFarreras.github.io/Comptabilitat/Test%20rep%C3%A0s%20Comptabilitat.html"
+          },
+          {
+            "name": "Test_balanç_de_situació",
+            "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_balan%C3%A7_de_situaci%C3%B3.html"
+          },
+          {
+            "name": "Test_comptes_comptables_comptabilitat",
+            "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_comptes_comptables_comptabilitat.html"
+          }
+        ]
       }
     ]
   },
   {
     "name": "Gestio_personal",
-    "apps": [
+    "folders": [
       {
-        "name": "Test_de_Gestió_Auxiliar_de_Personal",
-        "url": "https://AnnaFarreras.github.io/Gestio_personal/Test_de_Gesti%C3%B3_Auxiliar_de_Personal.html"
+        "name": "Arrel",
+        "files": [
+          {
+            "name": "Test_de_Gestió_Auxiliar_de_Personal",
+            "url": "https://AnnaFarreras.github.io/Gestio_personal/Test_de_Gesti%C3%B3_Auxiliar_de_Personal.html"
+          }
+        ]
       }
     ]
   },
   {
     "name": "Landingpage",
-    "apps": [
+    "folders": [
       {
-        "name": "index",
-        "url": "https://AnnaFarreras.github.io/Landingpage/index.html"
+        "name": "Arrel",
+        "files": [
+          {
+            "name": "index",
+            "url": "https://AnnaFarreras.github.io/Landingpage/index.html"
+          }
+        ]
       }
     ]
   },
   {
     "name": "Riscos_Laborals",
-    "apps": [
+    "folders": [
       {
-        "name": "Riscos Laborals",
-        "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test%20Riscos%20Laborals.html"
+        "name": "Arrel",
+        "files": [
+          {
+            "name": "Test Riscos Laborals",
+            "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test%20Riscos%20Laborals.html"
+          }
+        ]
       }
     ]
   }
