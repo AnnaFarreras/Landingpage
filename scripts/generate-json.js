@@ -23,13 +23,16 @@ async function getFilesRecursively(repo, dir = '') {
 
     for (const item of res.data) {
       if (item.type === 'dir') {
-        // 🔁 Recurse into subfolders
         const subfiles = await getFilesRecursively(repo, item.path);
         results.push(...subfiles);
       } else if (item.name.endsWith('.html') || item.name.endsWith('.pdf')) {
+        const filePath = item.path;
+        const folder = path.dirname(filePath);
+        const section = folder === '.' ? repo : `${repo} / ${folder}`;
         results.push({
+          section,
           name: item.name.replace(/-/g, ' ').replace(/test /i, '').replace(/\.(html|pdf)$/i, ''),
-          url: `https://${username}.github.io/${repo}/${item.path}`
+          url: `https://${username}.github.io/${repo}/${encodeURI(filePath)}`
         });
       }
     }
@@ -43,22 +46,28 @@ async function getFilesRecursively(repo, dir = '') {
 
 async function main() {
   const repos = await getRepos();
-  const output = [];
+  const allResults = [];
 
   for (const repo of repos) {
-    const apps = await getFilesRecursively(repo.name);
-    if (apps.length > 0) {
-      output.push({
-        name: repo.name,
-        apps
-      });
-    }
+    const files = await getFilesRecursively(repo.name);
+    allResults.push(...files);
   }
+
+  // Agrupar per secció
+  const grouped = {};
+  for (const file of allResults) {
+    if (!grouped[file.section]) grouped[file.section] = [];
+    grouped[file.section].push({ name: file.name, url: file.url });
+  }
+
+  const output = Object.entries(grouped).map(([section, apps]) => ({
+    name: section,
+    apps
+  }));
 
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
-
-  console.log(`✅ Fitxer repos.json creat amb ${output.length} repositoris.`);
+  console.log(`✅ Creat repos.json amb ${output.length} seccions`);
 }
 
 main();
