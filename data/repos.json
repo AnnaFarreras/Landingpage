@@ -1,6 +1,11 @@
 [
   {
-    "name": "index",
-    "ruta": "index.html"
+    "name": "Landingpage",
+    "apps": [
+      {
+        "name": "index.html",
+        "url": "https://annafarreras.github.io/Landingpage/"
+      }
+    ]
   }
 ]
