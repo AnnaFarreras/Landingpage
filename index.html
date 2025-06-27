@@ -46,7 +46,6 @@
   <script>
     const toggleBtn = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
-
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('hidden');
     });
@@ -67,16 +66,34 @@
           repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
           repoBtn.setAttribute('aria-expanded', 'false');
 
-          const folderContainer = document.createElement('div');
-          folderContainer.className = 'hidden mt-2 ml-4 space-y-1';
+          const repoContent = document.createElement('div');
+          repoContent.className = 'hidden mt-2 ml-4 space-y-1';
 
           repoBtn.addEventListener('click', () => {
-            const isHidden = folderContainer.classList.contains('hidden');
-            folderContainer.classList.toggle('hidden');
+            const isHidden = repoContent.classList.contains('hidden');
+            repoContent.classList.toggle('hidden');
             repoBtn.textContent = `${isHidden ? '▾' : '▸'} ${repo.name}`;
             repoBtn.setAttribute('aria-expanded', isHidden);
           });
 
+          // Fitxers a l'arrel del repositori
+          if (repo.files && repo.files.length > 0) {
+            repo.files.forEach(file => {
+              const fileBtn = document.createElement('button');
+              fileBtn.textContent = file.name;
+              fileBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
+              fileBtn.title = file.url;
+              fileBtn.addEventListener('click', () => {
+                document.getElementById('viewer').src = file.url;
+                if (window.innerWidth < 1024) {
+                  document.getElementById('sidebar').classList.add('hidden');
+                }
+              });
+              repoContent.appendChild(fileBtn);
+            });
+          }
+
+          // Carpetes dins del repositori
           repo.folders.forEach((folder, folderIndex) => {
             const folderBtn = document.createElement('button');
             folderBtn.textContent = `▸ ${folder.name}`;
@@ -101,18 +118,18 @@
               fileBtn.addEventListener('click', () => {
                 document.getElementById('viewer').src = file.url;
                 if (window.innerWidth < 1024) {
-                  sidebar.classList.add('hidden');
+                  document.getElementById('sidebar').classList.add('hidden');
                 }
               });
               fileList.appendChild(fileBtn);
             });
 
-            folderContainer.appendChild(folderBtn);
-            folderContainer.appendChild(fileList);
+            repoContent.appendChild(folderBtn);
+            repoContent.appendChild(fileList);
           });
 
           container.appendChild(repoBtn);
-          container.appendChild(folderContainer);
+          container.appendChild(repoContent);
         });
       })
       .catch(() => {
@@ -120,7 +137,7 @@
       });
   </script>
 
-  <!-- Ajust dinàmic d'iframe (si fa falta) -->
+  <!-- Ajust dinàmic d'iframe si es rep missatge -->
   <script>
     window.addEventListener('message', (event) => {
       if (event.data?.type === 'resize-iframe') {
