@@ -1,45 +1,74 @@
+aqui tinc això:
 const fs = require('fs');
+
 const path = require('path');
 
-function findFiles(dir, extensions, files = []) {
-  const items = fs.readdirSync(dir);
+const axios = require('axios');
 
-  for (const item of items) {
-    const fullPath = path.join(dir, item);
-    const stat = fs.statSync(fullPath);
-    if (stat.isDirectory()) {
-      findFiles(fullPath, extensions, files);
-    } else {
-      const ext = path.extname(item).toLowerCase();
-      if (extensions.includes(ext)) {
-        files.push(fullPath);
-      }
-    }
-  }
-  return files;
+const username = 'AnnaFarreras';
+
+const token = process.env.GH_TOKEN;
+
+async function getRepos() {
+
+const response = await axios.get(https://api.github.com/users/${username}/repos, {
+
+headers: { Authorization: `token ${token}` }
+
+});
+
+return response.data;
+
 }
 
-function main() {
-  const exts = ['.html', '.pdf'];
+async function getHTMLsFromRepo(repo) {
 
-  const allFiles = findFiles('./', exts);
+const res = await axios.get(https://api.github.com/repos/${username}/${repo}/contents, {
 
-  const output = allFiles.map(f => {
-    const ext = path.extname(f);
-    const name = path.basename(f, ext)
-      .replace(/-/g, ' ')
-      .replace(/test /i, '');
+headers: { Authorization: `token ${token}` }
 
-    return {
-      name,
-      ruta: f.replace(/^\.\//, '')
-    };
-  });
+});
 
-  fs.mkdirSync('data', { recursive: true });
-  fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
+return res.data.filter(f => f.name.endsWith('.html')).map(f => ({
 
-  console.log(`Generats ${output.length} fitxers (html i pdf) a data/repos.json`);
+name: f.name,
+
+url: `https://${username}.github.io/${repo}/${f.name}`
+
+}));
+
+}
+
+async function main() {
+
+const repos = await getRepos();
+
+const output = [];
+
+for (const repo of repos) {
+
+try {
+
+  const htmls = await getHTMLsFromRepo(repo.name);
+
+  if (htmls.length > 0) {
+
+    output.push({ name: repo.name, apps: htmls });
+
+  }
+
+} catch (e) {
+
+  console.error("Error with repo:", repo.name, e.message);
+
+}
+
+}
+
+fs.mkdirSync("data", { recursive: true });
+
+fs.writeFileSync("data/repos.json", JSON.stringify(output, null, 2));
+
 }
 
 main();
