@@ -18,12 +18,12 @@
 <body class="bg-gray-100 h-full">
   <div class="flex h-full">
     <!-- Sidebar -->
-    <aside id="sidebar" class="bg-white w-64 h-full shadow-md fixed top-0 left-0 z-10 p-4 overflow-y-auto hidden lg:block">
+    <aside id="sidebar" class="bg-white w-80 h-full shadow-md fixed top-0 left-0 z-10 p-4 overflow-y-auto hidden lg:block">
       <div id="repos-list" class="space-y-2"></div>
     </aside>
 
     <!-- Contingut principal -->
-    <div class="flex-1 h-full ml-0 lg:ml-64 flex flex-col">
+    <div class="flex-1 h-full ml-0 lg:ml-80 flex flex-col">
       <header class="bg-blue-600 text-blue-100 text-center text-xl font-bold flex justify-between items-center py-2 px-4">
         <div>Benvingut a <span class="text-white font-bold">TestàTIC</span>, el teu entrenador digital per aprendre jugant.</div>
         <button id="toggleSidebar" class="lg:hidden px-3 py-1 bg-blue-500 rounded focus:outline-none">Menú</button>
@@ -62,7 +62,7 @@
 
         filteredData.forEach((repo, repoIndex) => {
           const repoBtn = document.createElement('button');
-          repoBtn.textContent = `▸ ${repo.name}`;
+          repoBtn.textContent = `▸ ${repo.name.replaceAll('_', ' ')}`;
           repoBtn.className = 'w-full text-left px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none';
           repoBtn.setAttribute('aria-expanded', 'false');
 
@@ -72,7 +72,7 @@
           repoBtn.addEventListener('click', () => {
             const isHidden = repoContent.classList.contains('hidden');
             repoContent.classList.toggle('hidden');
-            repoBtn.textContent = `${isHidden ? '▾' : '▸'} ${repo.name}`;
+            repoBtn.textContent = `${isHidden ? '▾' : '▸'} ${repo.name.replaceAll('_', ' ')}`;
             repoBtn.setAttribute('aria-expanded', isHidden);
           });
 
@@ -80,7 +80,7 @@
           if (repo.files && repo.files.length > 0) {
             repo.files.forEach(file => {
               const fileBtn = document.createElement('button');
-              fileBtn.textContent = file.name;
+              fileBtn.textContent = file.name.replaceAll('_', ' ');
               fileBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
               fileBtn.title = file.url;
               fileBtn.addEventListener('click', () => {
@@ -96,7 +96,7 @@
           // Carpetes dins del repositori
           repo.folders.forEach((folder, folderIndex) => {
             const folderBtn = document.createElement('button');
-            folderBtn.textContent = `▸ ${folder.name}`;
+            folderBtn.textContent = `▸ ${folder.name.replaceAll('_', ' ')}`;
             folderBtn.className = 'w-full text-left px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none';
             folderBtn.setAttribute('aria-expanded', 'false');
 
@@ -106,13 +106,13 @@
             folderBtn.addEventListener('click', () => {
               const isHidden = fileList.classList.contains('hidden');
               fileList.classList.toggle('hidden');
-              folderBtn.textContent = `${isHidden ? '▾' : '▸'} ${folder.name}`;
+              folderBtn.textContent = `${isHidden ? '▾' : '▸'} ${folder.name.replaceAll('_', ' ')}`;
               folderBtn.setAttribute('aria-expanded', isHidden);
             });
 
             folder.files.forEach(file => {
               const fileBtn = document.createElement('button');
-              fileBtn.textContent = file.name;
+              fileBtn.textContent = file.name.replaceAll('_', ' ');
               fileBtn.className = 'w-full text-left px-3 py-1 bg-blue-400 text-white rounded hover:bg-blue-500 focus:outline-none';
               fileBtn.title = file.url;
               fileBtn.addEventListener('click', () => {
@@ -152,3 +152,4 @@
   </script>
 </body>
 </html>
+
