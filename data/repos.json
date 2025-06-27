@@ -1,10 +1,10 @@
 [
   {
-    "name": "Actic",
+    "name": "Actic / ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
     "apps": [
       {
         "name": "Temari ACTIC 3 – C5 · Mòdul 1: Manipulació d’imatges fixes",
-        "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari ACTIC 3 – C5 · Mòdul 1: Manipulació d’imatges fixes.html"
+        "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari%20ACTIC%203%20%E2%80%93%20C5%20%C2%B7%20M%C3%B2dul%201:%20Manipulaci%C3%B3%20d%E2%80%99imatges%20fixes.html"
       },
       {
         "name": "Test_ACTIC_3_C5_Gimp.html",
@@ -13,7 +13,12 @@
       {
         "name": "Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
         "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat.html"
-      },
+      }
+    ]
+  },
+  {
+    "name": "Actic",
+    "apps": [
       {
         "name": "Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
         "url": "https://AnnaFarreras.github.io/Actic/Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat.html"
@@ -25,11 +30,11 @@
     "apps": [
       {
         "name": "repàs Comptabilitat",
-        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test repàs Comptabilitat.html"
+        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test%20rep%C3%A0s%20Comptabilitat.html"
       },
       {
         "name": "Test_balanç_de_situació",
-        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_balanç_de_situació.html"
+        "url": "https://AnnaFarreras.github.io/Comptabilitat/Test_balan%C3%A7_de_situaci%C3%B3.html"
       },
       {
         "name": "Test_comptes_comptables_comptabilitat",
@@ -42,7 +47,7 @@
     "apps": [
       {
         "name": "Test_de_Gestió_Auxiliar_de_Personal",
-        "url": "https://AnnaFarreras.github.io/Gestio_personal/Test_de_Gestió_Auxiliar_de_Personal.html"
+        "url": "https://AnnaFarreras.github.io/Gestio_personal/Test_de_Gesti%C3%B3_Auxiliar_de_Personal.html"
       }
     ]
   },
@@ -60,7 +65,7 @@
     "apps": [
       {
         "name": "Riscos Laborals",
-        "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test Riscos Laborals.html"
+        "url": "https://AnnaFarreras.github.io/Riscos_Laborals/Test%20Riscos%20Laborals.html"
       }
     ]
   }
