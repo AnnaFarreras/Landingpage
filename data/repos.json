@@ -10,8 +10,8 @@
             "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Actic3_nivell_avan%C3%A7at_C5_continguts_competencials_i_formatius.pdf"
           },
           {
-            "name": "Temari ACTIC 3 – C5 · Mòdul 1: Manipulació d’imatges fixes",
-            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari%20ACTIC%203%20%E2%80%93%20C5%20%C2%B7%20M%C3%B2dul%201:%20Manipulaci%C3%B3%20d%E2%80%99imatges%20fixes.html"
+            "name": "Temari ACTIC 3 – C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Temari%20ACTIC%203%20%E2%80%93%20C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat.html"
           },
           {
             "name": "Test_ACTIC_3_C5_Gimp.html",
@@ -22,13 +22,22 @@
             "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat/Test_ACTIC_3_C5_Tractament_informacio_grafica_sonora_imatge_en_moviment_Nivell_avancat.html"
           }
         ]
+      },
+      {
+        "name": "ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
+        "files": [
+          {
+            "name": "Actic3_nivell_avançat_C7_continguts_competencials_i_formatius",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat/Actic3_nivell_avan%C3%A7at_C7_continguts_competencials_i_formatius.pdf"
+          },
+          {
+            "name": "Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
+            "url": "https://AnnaFarreras.github.io/Actic/ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat/Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat.html"
+          }
+        ]
       }
     ],
     "files": [
-      {
-        "name": "Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat",
-        "url": "https://AnnaFarreras.github.io/Actic/Test_ACTIC_3_C7_Tractament_de_les_dades_Nivell_avancat.html"
-      },
       {
         "name": "continguts_del_model_actic__competencials_i_formatius_",
         "url": "https://AnnaFarreras.github.io/Actic/continguts_del_model_actic__competencials_i_formatius_.pdf"
