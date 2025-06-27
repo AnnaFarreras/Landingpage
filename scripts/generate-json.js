@@ -26,13 +26,10 @@ async function getFilesRecursively(repo, dir = '') {
         const subfiles = await getFilesRecursively(repo, item.path);
         results.push(...subfiles);
       } else if (item.name.endsWith('.html') || item.name.endsWith('.pdf')) {
-        const filePath = item.path;
-        const folder = path.dirname(filePath);
-        const section = folder === '.' ? repo : `${repo} / ${folder}`;
         results.push({
-          section,
-          name: item.name.replace(/-/g, ' ').replace(/test /i, '').replace(/\.(html|pdf)$/i, ''),
-          url: `https://${username}.github.io/${repo}/${encodeURI(filePath)}`
+          path: item.path,
+          name: item.name.replace(/\.(html|pdf)$/i, '').replace(/-/g, ' '),
+          url: `https://${username}.github.io/${repo}/${encodeURI(item.path)}`
         });
       }
     }
@@ -44,30 +41,50 @@ async function getFilesRecursively(repo, dir = '') {
   }
 }
 
+function groupByRepoAndFolder(filesByRepo) {
+  const grouped = [];
+
+  for (const [repo, files] of Object.entries(filesByRepo)) {
+    const folders = {};
+
+    for (const file of files) {
+      const parts = file.path.split('/');
+      const folder = parts.length > 1 ? parts[0] : 'Arrel';
+
+      if (!folders[folder]) folders[folder] = [];
+      folders[folder].push({ name: file.name, url: file.url });
+    }
+
+    const folderArray = Object.entries(folders).map(([folderName, files]) => ({
+      name: folderName,
+      files
+    }));
+
+    grouped.push({
+      name: repo,
+      folders: folderArray
+    });
+  }
+
+  return grouped;
+}
+
 async function main() {
   const repos = await getRepos();
-  const allResults = [];
+  const filesByRepo = {};
 
   for (const repo of repos) {
     const files = await getFilesRecursively(repo.name);
-    allResults.push(...files);
+    if (files.length > 0) {
+      filesByRepo[repo.name] = files;
+    }
   }
 
-  // Agrupar per secció
-  const grouped = {};
-  for (const file of allResults) {
-    if (!grouped[file.section]) grouped[file.section] = [];
-    grouped[file.section].push({ name: file.name, url: file.url });
-  }
-
-  const output = Object.entries(grouped).map(([section, apps]) => ({
-    name: section,
-    apps
-  }));
+  const output = groupByRepoAndFolder(filesByRepo);
 
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
-  console.log(`✅ Creat repos.json amb ${output.length} seccions`);
+  console.log(`✅ repos.json creat amb estructura jeràrquica`);
 }
 
 main();
