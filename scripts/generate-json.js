@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
 
 const username = 'AnnaFarreras';
@@ -13,56 +12,55 @@ async function getRepos() {
 }
 
 async function getFilesRecursively(repo, dir = '') {
-  const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${dir}`;
-  try {
-    const res = await axios.get(apiUrl, {
-      headers: { Authorization: `token ${token}` }
-    });
+  const url = `https://api.github.com/repos/${username}/${repo}/contents/${dir}`;
+  const res = await axios.get(url, {
+    headers: { Authorization: `token ${token}` }
+  });
 
-    const results = [];
+  const files = [];
 
-    for (const item of res.data) {
-      if (item.type === 'dir') {
-        const subfiles = await getFilesRecursively(repo, item.path);
-        results.push(...subfiles);
-      } else if (item.name.endsWith('.html') || item.name.endsWith('.pdf')) {
-        results.push({
-          path: item.path,
-          name: item.name.replace(/\.(html|pdf)$/i, '').replace(/-/g, ' '),
-          url: `https://${username}.github.io/${repo}/${encodeURI(item.path)}`
-        });
-      }
+  for (const item of res.data) {
+    if (item.type === 'dir') {
+      const subfiles = await getFilesRecursively(repo, item.path);
+      files.push(...subfiles);
+    } else if (item.name.endsWith('.html') || item.name.endsWith('.pdf')) {
+      files.push({
+        path: item.path,
+        name: item.name.replace(/\.(html|pdf)$/i, '').replace(/-/g, ' '),
+        url: `https://${username}.github.io/${repo}/${encodeURI(item.path)}`
+      });
     }
-
-    return results;
-  } catch (e) {
-    console.error(`❌ Error accedint a ${repo}/${dir}: ${e.message}`);
-    return [];
   }
+
+  return files;
 }
 
 function groupByRepoAndFolder(filesByRepo) {
   const grouped = [];
 
   for (const [repo, files] of Object.entries(filesByRepo)) {
-    const folders = {};
+    const folders = [];
+    const rootFiles = [];
 
     for (const file of files) {
       const parts = file.path.split('/');
-      const folder = parts.length > 1 ? parts[0] : 'Arrel';
-
-      if (!folders[folder]) folders[folder] = [];
-      folders[folder].push({ name: file.name, url: file.url });
+      if (parts.length === 1) {
+        rootFiles.push({ name: file.name, url: file.url });
+      } else {
+        const folder = parts[0];
+        let folderObj = folders.find(f => f.name === folder);
+        if (!folderObj) {
+          folderObj = { name: folder, files: [] };
+          folders.push(folderObj);
+        }
+        folderObj.files.push({ name: file.name, url: file.url });
+      }
     }
-
-    const folderArray = Object.entries(folders).map(([folderName, files]) => ({
-      name: folderName,
-      files
-    }));
 
     grouped.push({
       name: repo,
-      folders: folderArray
+      folders,
+      files: rootFiles
     });
   }
 
@@ -84,7 +82,7 @@ async function main() {
 
   fs.mkdirSync('data', { recursive: true });
   fs.writeFileSync('data/repos.json', JSON.stringify(output, null, 2));
-  console.log(`✅ repos.json creat amb estructura jeràrquica`);
+  console.log('✅ repos.json creat correctament');
 }
 
 main();
